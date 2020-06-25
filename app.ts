@@ -6,24 +6,33 @@ import logger from "morgan";
 import indexRouter from "./routes/index";
 
 import Agenda from "agenda";
+const io = require("socket.io")(3001);
 
 const mongoConnectionString = "mongodb://127.0.0.1/test-agenda";
 
 const agenda = new Agenda({ db: { address: mongoConnectionString } });
 
 agenda.define("test job", async (job) => {
-  console.log("this is the job data:");
-  console.log(job.attrs);
-  // await User.remove({ lastLogIn: { $lt: twoDaysAgo } });
+  console.log(`running job at ${job.attrs.lastRunAt}`);
   return Promise.resolve({ message: "job is done" });
 });
 
 (async function () {
-  // IIFE to give access to async/await
   await agenda.start();
-
-  await agenda.every("5 seconds", "test job");
+  await agenda.every("3 seconds", "test job");
 })();
+
+io.on("connection", (socket) => {
+  const socketInterval = setInterval(() => {
+    console.log("emitting ping data");
+
+    socket.emit("ping", { message: "ping" });
+  }, 1000);
+
+  socket.on("disconnect", () => {
+    clearInterval(socketInterval);
+  });
+});
 
 const app = express();
 
