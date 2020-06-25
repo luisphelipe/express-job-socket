@@ -5,7 +5,25 @@ import logger from "morgan";
 
 import indexRouter from "./routes/index";
 
-var app = express();
+// import Queue from "bull";
+
+// const testQueue = new Queue("test");
+
+// testQueue.process(function (job, done) {
+//   console.log("this is the test queue current job");
+//   console.log(job.data);
+
+//   // Add a socketio.emit here
+
+//   done();
+// });
+
+// testQueue.add(
+//   { message: "job data" },
+//   { repeat: { every: 5000 }, removeOnComplete: true }
+// );
+
+const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());

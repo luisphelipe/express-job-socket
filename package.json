@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "start": "tsc && node ./bin/www",
-    "dev": "ts-node-dev --respawn --transpileOnly ./bin/www"
+    "dev": "ts-node-dev --respawn --transpileOnly ./bin/wwwdev"
   },
   "dependencies": {
+    "@types/bull": "^3.14.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.6",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.0.14",
+    "bull": "^3.14.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "^4.17.1",
