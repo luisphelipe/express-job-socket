@@ -5,23 +5,25 @@ import logger from "morgan";
 
 import indexRouter from "./routes/index";
 
-// import Queue from "bull";
+import Agenda from "agenda";
 
-// const testQueue = new Queue("test");
+const mongoConnectionString = "mongodb://127.0.0.1/test-agenda";
 
-// testQueue.process(function (job, done) {
-//   console.log("this is the test queue current job");
-//   console.log(job.data);
+const agenda = new Agenda({ db: { address: mongoConnectionString } });
 
-//   // Add a socketio.emit here
+agenda.define("test job", async (job) => {
+  console.log("this is the job data:");
+  console.log(job.attrs);
+  // await User.remove({ lastLogIn: { $lt: twoDaysAgo } });
+  return Promise.resolve({ message: "job is done" });
+});
 
-//   done();
-// });
+(async function () {
+  // IIFE to give access to async/await
+  await agenda.start();
 
-// testQueue.add(
-//   { message: "job data" },
-//   { repeat: { every: 5000 }, removeOnComplete: true }
-// );
+  await agenda.every("5 seconds", "test job");
+})();
 
 const app = express();
 
